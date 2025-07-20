@@ -26,7 +26,7 @@ const Register = () => {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:8080/registration', {
+      const response = await fetch('http://100.25.195.141/registration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
