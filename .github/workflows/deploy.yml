@@ -6,7 +6,7 @@ on:
       - qa
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,15 @@ jobs:
       - name: 📤 Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/appointment-frontend:qa
+
+      - name: 📂 Deploy frontend container to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/appointment-frontend:qa
+            docker stop appointment-frontend || true
+            docker rm appointment-frontend || true
+            docker run -d --name appointment-frontend -p 80:80 ${{ secrets.DOCKER_USERNAME }}/appointment-frontend:qa
