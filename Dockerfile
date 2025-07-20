@@ -4,5 +4,5 @@ COPY . .
 RUN npm install && npm run build
 
 FROM nginx:1.25
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 EXPOSE 80
